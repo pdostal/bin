@@ -1,0 +1,16 @@
+#!/bin/sh
+if [ $1 = "start" ]; then
+	sudo apachectl start
+	sudo /usr/local/mysql/support-files/mysql.server start 1> /dev/null
+	nohup /Applications/Postgres93.app/Contents/MacOS/Postgres93 &> /dev/null &
+elif [ $1 = "stop" ]; then
+	sudo apachectl stop
+	sudo /usr/local/mysql/support-files/mysql.server stop 1> /dev/null
+elif [ $I = "restart" ]; then
+	sudo apachectl restart
+	sudo /usr/local/mysql/support-files/mysql.server restart 1> /dev/null
+elif [ $1 = "kill" ]; then
+	killall Postgres93
+else
+	echo "Params: start|stop|restart|kill"
+fi
