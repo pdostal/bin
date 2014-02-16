@@ -6,7 +6,7 @@ if [ $1 = "start" ]; then
 elif [ $1 = "stop" ]; then
 	sudo apachectl stop
 	sudo /usr/local/mysql/support-files/mysql.server stop 1> /dev/null
-elif [ $I = "restart" ]; then
+elif [ $1 = "restart" ]; then
 	sudo apachectl restart
 	sudo /usr/local/mysql/support-files/mysql.server restart 1> /dev/null
 elif [ $1 = "kill" ]; then
