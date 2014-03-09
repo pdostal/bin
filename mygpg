@@ -1,0 +1,67 @@
+#!/bin/sh
+srv[0]="keys.gnupg.net"
+srv[1]="hkp://pool.sks-keyservers.net"
+srv[2]="keyserver.ubuntu.com"
+  if [ "$1" = "new" ]; then
+	gpg --gen-key
+elif [ "$1" = "list" ]; then
+	gpg --list-keys
+elif [ "$1" = "list-secret" ]; then
+	gpg --list-secret-keys
+elif [ "$1" = "export" ]; then
+	gpg --export -a $2
+elif [ "$1" = "revoke" ]; then
+	gpg --gen-revoke $2
+elif [ "$1" = "delete" ]; then
+	gpg --delete-keys $2
+elif [ "$1" = "delete-secret" ]; then
+	gpg --delete-secret-keys $2
+elif [ "$1" = "search" ]; then
+	for sr in "${srv[@]}"; do
+		gpg --keyserver ${sr} --search-keys $2
+		echo ""
+	done
+elif [ "$1" = "receive" ]; then
+	for sr in "${srv[@]}"; do
+		gpg --keyserver ${sr} --recv-key $2
+		echo ""
+	done
+elif [ "$1" = "check" ]; then
+	gpg --check-sigs $2
+elif [ "$1" = "sign" ]; then
+	gpg --sign-key $2
+elif [ "$1" = "send" ]; then
+	for sr in "${srv[@]}"; do
+		gpg --keyserver ${srv[0]} --send-keys $2
+		echo ""
+	done
+elif [ "$1" = "verify" ]; then
+	gpg --verify $2
+elif [ "$1" = "clearsign" ]; then
+	gpg --clearsign < $2 > $3
+elif [ "$1" = "filesign" ]; then
+	gpg -b $2
+elif [ "$1" = "fileverify" ]; then
+	gpg --verify $2
+else
+	for sr in "${srv[@]}"; do
+		echo "${sr}"
+	done
+	echo ""
+	echo "${0##*/} new\n"
+	echo "${0##*/} list"
+	echo "${0##*/} list-secret\n"
+	echo "${0##*/} export"
+	echo "${0##*/} revoke"
+	echo "${0##*/} delete"
+	echo "${0##*/} delete-secret\n"
+	echo "${0##*/} search <STRING>"
+	echo "${0##*/} receive <ID>"
+	echo "${0##*/} check <ID>"
+	echo "${0##*/} sign <ID>"
+	echo "${0##*/} send <ID>"
+	echo "${0##*/} verify <FILE>\n"
+	echo "${0##*/} clearsign <IN> <OUT>"
+	echo "${0##*/} filesign <IN>"
+	echo "${0##*/} fileverify <IN>"
+fi
