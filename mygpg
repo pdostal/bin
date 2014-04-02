@@ -32,7 +32,7 @@ elif [ "$1" = "sign" ]; then
 	gpg --sign-key $2
 elif [ "$1" = "send" ]; then
 	for sr in "${srv[@]}"; do
-		gpg --keyserver ${srv[0]} --send-keys $2
+		gpg --keyserver ${sr} --send-keys $2
 		echo ""
 	done
 elif [ "$1" = "verify" ]; then
