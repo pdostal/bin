@@ -1,8 +1,0 @@
-#!/bin/sh
-cd ~/rea/rails
-rails s &
-sleep 15
-cd ../node
-coffee app.coffee
-killall $!
-sleep 5

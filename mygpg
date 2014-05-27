@@ -2,6 +2,7 @@
 srv[0]="keys.gnupg.net"
 srv[1]="hkp://pool.sks-keyservers.net"
 srv[2]="keyserver.ubuntu.com"
+srv[3]="pgp.mit.edu"
   if [ "$1" = "new" ]; then
 	gpg --gen-key
 elif [ "$1" = "list" ]; then
