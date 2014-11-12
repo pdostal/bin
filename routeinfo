@@ -1,0 +1,3 @@
+#!/bin/sh
+netstat -nr | sed "/[%|#]/d" | sed '/^s*$/d'
+
