@@ -1,0 +1,13 @@
+#!/bin/sh
+backup() {
+  duplicity --no-print-statistics -v2 --encrypt-key D03D2135 $HOME/$1 scp://pavel@vps.pdostal.cz/backups/$1
+  echo "* $1"
+}
+
+backup bin
+backup cfg
+backup www
+backup tex
+backup rea
+backup repos
+backup projects
