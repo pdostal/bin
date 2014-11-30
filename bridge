@@ -1,0 +1,20 @@
+#!/bin/sh
+while test $# -gt 0; do
+  case "$1" in
+    create)
+      sudo ifconfig $2 create
+      sudo ifconfig $2 addm $3 addm $4 up
+      break
+      ;;
+    delete)
+      sudo ifconfig $2 destroy
+      break
+      ;;
+    *)
+      echo "bridge create <bridge> <if1> <if2>"
+      echo "bridge delete <bridge>"
+      break
+      ;;
+  esac
+done
+
