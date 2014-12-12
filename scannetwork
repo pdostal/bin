@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ $1 ]; then
-	nmap -nsP $1 2>/dev/null -oG - | grep "Up$" | awk '{printf "%s\n", $2}'
+	nmap -p 21,22,80,445 -PE $1 2>/dev/null -oG - | grep "Up$" | sed 's/Host: //' | gsed 's/ (/\t/' | sed 's/).*//'
 else
 	echo "Please specify network ... e.g: 192.168.1.0/24"
 fi
