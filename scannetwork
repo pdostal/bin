@@ -1,7 +1,24 @@
 #!/bin/sh
-if [ $1 ]; then
-	nmap -p 21,22,80,445 -PE $1 2>/dev/null -oG - | grep "Up$" | sed 's/Host: //' | gsed 's/ (/\t/' | sed 's/).*//'
-else
-	echo "Please specify network ... e.g: 192.168.1.0/24"
+if [ ! $1 ]; then
+	echo "scannetwork 192.168.1.0/24"
+	echo "scannetwork 192.168.1.0/24 -a"
+	echo "scannetwork 192.168.1.0/24 -p 21,22"
+	exit
 fi
 
+while test $# -gt 0; do
+	case "$2" in
+		-p)
+			nmap -p $3 -PE $1 2>/dev/null -oG - | grep "Up$" | sed 's/Host: //' | gsed 's/ (/\t/' | sed 's/).*//'
+			shift
+			;;
+		-a)
+			nmap -PE $1 2>/dev/null -oG - | grep "Up$" | sed 's/Host: //' | gsed 's/ (/\t/' | sed 's/).*//'
+			shift
+			;;
+		*)
+			nmap -p 21,22,80,445 -PE $1 2>/dev/null -oG - | grep "Up$" | sed 's/Host: //' | gsed 's/ (/\t/' | sed 's/).*//'
+			shift
+			;;
+	esac
+done
