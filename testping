@@ -1,0 +1,6 @@
+#!/bin/sh
+while : ; do
+	echo "`date +'%d.%m.%Y %H:%M:%S'` > `fping $1`"
+	sleep $2
+done
+
