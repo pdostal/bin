@@ -1,0 +1,5 @@
+#!/bin/sh
+if ! mosh $1; then
+	ssh $1 pkill mosh
+	mosh $1
+fi
