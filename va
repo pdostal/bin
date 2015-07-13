@@ -1,3 +1,6 @@
 #!/bin/sh
-vagrant up && vagrant ssh && vagrant suspend
+vagrant='/opt/vagrant/bin/vagrant'
+$vagrant up
+$vagrant ssh
+$vagrant suspend
 
