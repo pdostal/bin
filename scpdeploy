@@ -1,7 +1,0 @@
-#!/bin/bash
-echo "Deploying $2 to $1 ... Sure?"
-if read response; then
-  ssh $1 'cd $2; git pull -f'
-else
-  echo "scpdeploy [host] [path]"
-fi
