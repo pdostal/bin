@@ -1,10 +1,14 @@
 #!/bin/sh
 
-if [ -z "$2" ]; then
-  AGENT="GET"
+if [ -z "$1" ]; then
+  echo "spycurl <URL> <METHOD> <DATA>"
 else
-  AGENT="$2"
-fi
+  if [ -z "$2" ]; then
+    AGENT="GET"
+  else
+    AGENT="$2"
+  fi
 
-curl -SLivs -o /dev/null -A 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36' -X "$2" -d "$3" $1
+  curl -SLivs -o /dev/null -A 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36' -X "$2" -d "$3" $1
+fi
 
