@@ -1,0 +1,6 @@
+#!/bin/bash
+
+istats battery temp | gsed -r "s/(tery temp)(.+)(°C)(.+)/\2\3/g"
+istats cpu temp | gsed -r "s/( temp)(.+)(°C)(.+)/\2\3/g"
+istats fan speed | egrep "speed|temp"| gsed -r "s/( [0-9] speed)(.+)( RPM)(.+)/\2\3/g"
+
