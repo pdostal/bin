@@ -1,14 +1,21 @@
 #!/bin/sh
 
 if [ -z "$1" ]; then
-  echo "spycurl <URL> <METHOD> <DATA>"
+  echo "Usage: spycurl URL [METHOD DATA]"
 else
   if [ -z "$2" ]; then
-    AGENT="GET"
+    METHOD="GET"
   else
-    AGENT="$2"
+    METHOD="$2"
   fi
+  DATA="$3"
 
-  curl -SLivs -o /dev/null -A 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36' -X "$2" -d "$3" $1
+  curl -SLivs -o /dev/null -X "$METHOD" -d "$DATA" "$1" \
+-w "Summary:
+Total: %{time_total}s Resoling: %{time_namelookup}s Connect: %{time_namelookup}s Redirect: %{time_redirect}s
+From: %{local_ip}:%{local_port} To: %{remote_ip}:%{remote_port}
+$METHOD $1 $DATA
+%{http_code} %{url_effective}\n" \
+    -A 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 fi
 

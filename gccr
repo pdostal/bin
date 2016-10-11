@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 name=$(echo ${1} | sed -e 's/\.c$//g')
-echo $name
 
 rm $name 2> /dev/null
 gcc -o $name $name.c
