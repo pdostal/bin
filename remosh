@@ -1,4 +1,4 @@
 #!/bin/sh
-ssh $1 pkill mosh-server
+ssh -S none $1 pkill mosh-server
 mosh $1
 

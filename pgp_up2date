@@ -1,0 +1,25 @@
+#!/bin/bash
+
+servers=()
+servers+=("hkp://pool.sks-keyservers.net")
+servers+=("hkp://keys.gnupg.net")
+servers+=("hkp://pgp.mit.edu")
+servers+=("hkp://pgp.uni-mainz.de")
+
+echo "We use those servers: "
+for i in ${!servers[@]}; do
+  echo "* ${servers[$i]}"
+done
+
+echo
+echo "Pulling ${1}"
+for i in ${!servers[@]}; do
+  gpg2 --keyserver ${servers[$i]} --recv-keys ${1}
+done
+
+echo
+echo "Pushing ${1}"
+for i in ${!servers[@]}; do
+  gpg2 --keyserver ${servers[$i]} --send-key ${1}
+done
+
