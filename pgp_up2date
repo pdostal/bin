@@ -1,10 +1,10 @@
 #!/bin/bash
 
 servers=()
-servers+=("hkp://pool.sks-keyservers.net")
-servers+=("hkp://keys.gnupg.net")
-servers+=("hkp://pgp.mit.edu")
-servers+=("hkp://pgp.uni-mainz.de")
+servers+=("pool.sks-keyservers.net")
+servers+=("keys.gnupg.net")
+servers+=("pgp.mit.edu")
+servers+=("pgp.uni-mainz.de")
 
 echo "We use those servers: "
 for i in ${!servers[@]}; do
