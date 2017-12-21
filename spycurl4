@@ -13,8 +13,18 @@ else
   DATA="$3"
 
   curl -SLivs4 -o /dev/null -A "$USERAGENT" -X "$METHOD" -d "$DATA" "$1" \
--w "IPv4 Summary:
-Total: %{time_total}s Resoling: %{time_namelookup}s Connect: %{time_namelookup}s Redirect: %{time_redirect}s
+-w "
+time_namelookup:     %{time_namelookup}
+time_connect:        %{time_connect}
+time_appconnect:     %{time_appconnect}
+time_pretransfer:    %{time_pretransfer}
+time_redirect:       %{time_redirect}
+time_starttransfer:  %{time_starttransfer}
+
+time_total:  %{time_total}
+
+
+IPv4 Summary:
 From: %{local_ip}:%{local_port} To: %{remote_ip}:%{remote_port}
 $METHOD $1 $DATA
 GOT %{http_code} %{url_effective}\n"
