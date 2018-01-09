@@ -1,6 +1,7 @@
 #!/bin/sh
 
-curl -SLivs -o /dev/null $@ \
+AGENT='Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+curl -SLivs -A"$AGENT" -o /dev/null $@ \
 -w "
 DNS looked up:      %{time_namelookup}
 TCP connected:      %{time_connect}
