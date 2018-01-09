@@ -1,0 +1,17 @@
+#!/bin/sh
+
+curl -SLivs -o /dev/null $@ \
+-w "
+DNS looked up:      %{time_namelookup}
+TCP connected:      %{time_connect}
+HTTP(S) connected:  %{time_appconnect}
+Transfer prepared:  %{time_pretransfer}
+(if) Redirected:    %{time_redirect}
+Transfer started:   %{time_starttransfer}
+
+Ended:  %{time_total}
+
+
+From: %{local_ip}:%{local_port} To: %{remote_ip}:%{remote_port}
+GOT %{http_code} %{url_effective}\n"
+
