@@ -1,7 +1,0 @@
-#!/bin/sh
-IFS=","
-
-for i in $1; do
-  echo "`ssh $i ${@:2}` ($i)";
-done
-

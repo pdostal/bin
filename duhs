@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+(du -hs $1* 2> /dev/null) | sort -h
+

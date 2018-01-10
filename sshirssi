@@ -1,6 +1,0 @@
-#!/bin/bash
-for ((;;)); do
-	ssh -o ConnectTimeout=3 -o ServerAliveInterval=15 -o ServerAliveCountMax=3 -o BatchMode=yes -o StrictHostKeyChecking=no shark -t 'screen -x'
-	#sleep 3
-	read
-done
