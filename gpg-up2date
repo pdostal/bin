@@ -14,12 +14,12 @@ done
 echo
 echo "Pulling ${1}"
 for i in ${!servers[@]}; do
-  gpg2 --keyserver ${servers[$i]} --recv-keys ${1}
+  gpg --keyserver ${servers[$i]} --recv-keys ${1}
 done
 
 echo
 echo "Pushing ${1}"
 for i in ${!servers[@]}; do
-  gpg2 --keyserver ${servers[$i]} --send-key ${1}
+  gpg --keyserver ${servers[$i]} --send-key ${1}
 done
 
