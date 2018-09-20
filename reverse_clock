@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+23.downto(0) do |i|
+  59.downto(0) do |j|
+    tick = "#{'%02d' % i}:#{'%02d' % j}"
+    system "/bin/bash /Users/pdostal/bin/cryptoclock #{tick} 2> /dev/null"
+    sleep 1
+  end
+end
+
