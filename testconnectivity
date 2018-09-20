@@ -1,4 +1,4 @@
 #!/bin/bash
-fping -c 1 $1 &> /dev/null && IP4="IPv4: ✓`ping -c 1 $1 | sed '$!d;s|.*/\([0-9.]*\)/.*|\1|' | xargs printf '%.*f\n' 0`ms" || IP4="IPv4: ✕"
-fping6 -c 1 $1 &> /dev/null && IP6="IPv6: ✓`ping6 -c 1 $1 | sed '$!d;s|.*/\([0-9.]*\)/.*|\1|' | xargs printf '%.*f\n' 0`ms" || IP6="IPv6: ✕"
+ping -c 1 $1 &> /dev/null && IP4="IPv4: ✓`ping -c 1 $1 | sed '$!d;s|.*/\([0-9.]*\)/.*|\1|' | xargs printf '%.*f\n' 0`ms" || IP4="IPv4: ✕"
+ping6 -c 1 $1 &> /dev/null && IP6="IPv6: ✓`ping6 -c 1 $1 | sed '$!d;s|.*/\([0-9.]*\)/.*|\1|' | xargs printf '%.*f\n' 0`ms" || IP6="IPv6: ✕"
 echo "${IP4} ${IP6}"
