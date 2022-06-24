@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-curl -v --insecure --header "Content-Type: application/json" --request POST --data '{"secret":"7fd9f89b099f010c90bc4df3fa6ae49f77eb8e7f4e8e3a5a9469bf41b8d5efb4","type":"string","content":"'"${1}"'","duration":"999"}' https://www.staging.cryptoclock.net/channels/b330cb75-b8c9-4492-8872-5333d66f4572/publish
-
