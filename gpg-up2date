@@ -11,19 +11,19 @@ servers+=("https://pgp.key-server.io")
 servers+=("https://keys.openpgp.org")
 
 echo "We use those servers: "
-for i in ${!servers[@]}; do
+for i in "${!servers[@]}"; do
   echo "* ${servers[$i]}"
 done
 
 echo
 echo "Pulling ${1}"
-for i in ${!servers[@]}; do
+for i in "${!servers[@]}"; do
   gpg --keyserver ${servers[$i]} --recv-keys ${1}
 done
 
 echo
 echo "Pushing ${1}"
-for i in ${!servers[@]}; do
+for i in "${!servers[@]}"; do
   gpg --keyserver ${servers[$i]} --send-key ${1}
 done
 

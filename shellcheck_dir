@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+find . -not -path '*/.*' -type f | while read fname; do
+  type=$(file -b $fname | awk '{print $2}')
+  if [[ $type = shell ]]; then
+    echo $fname
+  fi
+done
+
