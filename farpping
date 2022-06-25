@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 fping -aq "$@" | sort -V | while read -r ip ; do
-  printf "$ip\t"
+  printf "%s\t" "$ip"
   arp -an | grep "($ip)" | awk '{printf $4}'
   printf "\n"
 done

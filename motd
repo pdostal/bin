@@ -1,52 +1,57 @@
 #!/usr/bin/env bash
-. ~/bin/motd.vars
-HOUR=$(date +%H)
+
+#. ~/bin/motd.vars
 
 if [[ ! -f /tmp/motd-weather.json || -n $(find /tmp/motd-weather.json -type f -mmin +30 2> /dev/null) ]]; then
   curl -s "https://wttr.in/$LOCATION?m&format=%l:++$SIGN+%t++r:+%p++w:+%w++p:+%P++h:+%h\\n" -o /tmp/motd-weather.json
 fi
-if [[ ! -f /tmp/motd-currency.json || -n $(find /tmp/motd-currency.json -type f -mmin +30 2> /dev/null) ]]; then
-  curl -s -H "x-rapidapi-key: $RAPIDAPI" 'https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=CZK&to=USD,EUR,GBP&amount=1' -o /tmp/motd-currency.json
-fi
-if [[ ! -f /tmp/motd-crypto.json || -n $(find /tmp/motd-crypto.json -type f -mmin +30 2> /dev/null) ]]; then
-  curl -s -H "X-CMC_PRO_API_KEY: $COINMARKETCAPAPI" -H "Accept: application/json" -d "convert=CZK&symbol=btc,ltc,eth" -G https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest -o /tmp/motd-crypto.json
-fi
-if [[ ! -f /tmp/motd-stock.json || -n $(find /tmp/motd-stock.json -type f -mmin +30 2> /dev/null) ]]; then
-  curl -s 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=AAPL,GOOG,SUSE.F' -o /tmp/motd-stock.json
-fi
+#if [[ ! -f /tmp/motd-currency.json || -n $(find /tmp/motd-currency.json -type f -mmin +30 2> /dev/null) ]]; then
+#  curl -s -H "x-rapidapi-key: $RAPIDAPI" 'https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=CZK&to=USD,EUR,GBP&amount=1' -o /tmp/motd-currency.json
+#fi
+#if [[ ! -f /tmp/motd-crypto.json || -n $(find /tmp/motd-crypto.json -type f -mmin +30 2> /dev/null) ]]; then
+#  curl -s -H "X-CMC_PRO_API_KEY: $COINMARKETCAPAPI" -H "Accept: application/json" -d "convert=CZK&symbol=btc,ltc,eth" -G https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest -o /tmp/motd-crypto.json
+#fi
+#if [[ ! -f /tmp/motd-stock.json || -n $(find /tmp/motd-stock.json -type f -mmin +30 2> /dev/null) ]]; then
+#  curl -s 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=AAPL,GOOG,SUSE.F' -o /tmp/motd-stock.json
+#fi
 if [[ ! -f /tmp/motd-covidcz.json || -n $(find /tmp/motd-covidcz.json -type f -mmin +30 2> /dev/null) ]]; then
   curl -s https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/zakladni-prehled.min.json -o /tmp/motd-covidcz.json
 fi
 
-USD=$(cat /tmp/motd-currency.json | jq -r '1/(.rates.USD.rate|tonumber)')
-
-date +"%A, week %V - %d. %B %Y - %H:%M:%S %p %:z (%Z)"
+HOUR=$(date +%H)
 if ((10#$HOUR >= 5 && 10#$HOUR <= 22)); then SIGN="%c"; else SIGN="%m"; fi
+
+#USD=$(cat /tmp/motd-currency.json | jq -r '1/(.rates.USD.rate|tonumber)')
+
+date +"Today is %A, week %V. Date: %d. %B %Y Time: %H:%M:%S %p %:z (%Z)"
 cat /tmp/motd-weather.json
 echo
 
-cat /tmp/motd-currency.json | 
-  jq -r '.rates|to_entries[] | "\(.key) \(1/(.value.rate|tonumber))"' |
-  xargs printf "1 %s = %'9.2f Kč\t"
-echo
-cat /tmp/motd-crypto.json |
-  jq -r '.data[] | "\(.symbol) \(.quote.CZK.price)"' |
-  xargs printf "1 %s =\t%'9.0f Kč\t"
-echo
-cat /tmp/motd-stock.json |
-  jq -r '.quoteResponse.result[] | "\(.symbol) \(.regularMarketPrice)"' |
-  xargs printf "%6s:  %'8.2f \$\t"
-echo
-cat /tmp/motd-covidcz.json | jq -r '.data[] |
-  "\(.potvrzene_pripady_vcerejsi_den) \(.ockovane_osoby_vcerejsi_den) \(.ockovane_osoby_celkem)"' |
-  xargs printf "  New yesterday: %'4.0f\tVaccinated yesterday: %'5.0f total: %'7.0f\n"
-echo -ne "\n\n"
+#cat /tmp/motd-currency.json | 
+#  jq -r '.rates|to_entries[] | "\(.key) \(1/(.value.rate|tonumber))"' |
+#  xargs printf "1 %s = %'9.2f Kč\t"
+#echo
+#cat /tmp/motd-crypto.json |
+#  jq -r '.data[] | "\(.symbol) \(.quote.CZK.price)"' |
+#  xargs printf "1 %s =\t%'9.0f Kč\t"
+#echo
+#cat /tmp/motd-stock.json |
+#  jq -r '.quoteResponse.result[] | "\(.symbol) \(.regularMarketPrice)"' |
+#  xargs printf "%6s:  %'8.2f \$\t"
+#echo
+#cat /tmp/motd-covidcz.json | jq -r '.data[] |
+#  "\(.potvrzene_pripady_vcerejsi_den) \(.ockovane_osoby_vcerejsi_den) \(.ockovane_osoby_celkem)"' |
+#  xargs printf "  New yesterday: %'4.0f\tVaccinated yesterday: %'5.0f total: %'7.0f\n"
+
+command -v /usr/bin/fortune &> /dev/null && /usr/bin/fortune
+
+echo -ne "\n"
 
 if ((10#$HOUR >= 5 && 10#$HOUR <=11)); then
-  echo "Have a lot of fun this morning!";
+  echo -en "Good morning...\n\n";
 elif ((10#$HOUR >= 12 && 10#$HOUR <=20)); then
-  echo "Have a lot of fun this afternoon!";
+  echo -en "Have a lot of fun...\n\n";
 else
-  echo "Have a lot of fun tonight!";
+  echo -en "Enjoy the evening...\n\n";
 fi
 

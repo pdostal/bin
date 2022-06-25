@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # The ludeeus/action-shellcheck github action does this automatically
-find . -not -path '*/.*' -type f | while read fname; do
+find . -not -path '*/.*' -type f | while read -r fname; do
   type=$(file -b $fname | awk '{print $2}')
   if [[ $type = shell ]]; then
     echo $fname
