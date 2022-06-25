@@ -14,18 +14,17 @@ fi
 #if [[ ! -f /tmp/motd-stock.json || -n $(find /tmp/motd-stock.json -type f -mmin +30 2> /dev/null) ]]; then
 #  curl -s 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=AAPL,GOOG,SUSE.F' -o /tmp/motd-stock.json
 #fi
-if [[ ! -f /tmp/motd-covidcz.json || -n $(find /tmp/motd-covidcz.json -type f -mmin +30 2> /dev/null) ]]; then
-  curl -s https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/zakladni-prehled.min.json -o /tmp/motd-covidcz.json
-fi
+#if [[ ! -f /tmp/motd-covidcz.json || -n $(find /tmp/motd-covidcz.json -type f -mmin +30 2> /dev/null) ]]; then
+#  curl -s https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/zakladni-prehled.min.json -o /tmp/motd-covidcz.json
+#fi
 
 HOUR=$(date +%H)
 if ((10#$HOUR >= 5 && 10#$HOUR <= 22)); then SIGN="%c"; else SIGN="%m"; fi
 
 #USD=$(cat /tmp/motd-currency.json | jq -r '1/(.rates.USD.rate|tonumber)')
 
-date +"Today is %A, week %V. Date: %d. %B %Y Time: %H:%M:%S %p %:z (%Z)"
+date +"It's %A, week %V Date: %d. %B %Y Time: %H:%M:%S %p %z (%Z)"
 cat /tmp/motd-weather.json
-echo
 
 #cat /tmp/motd-currency.json | 
 #  jq -r '.rates|to_entries[] | "\(.key) \(1/(.value.rate|tonumber))"' |
@@ -43,13 +42,19 @@ echo
 #  "\(.potvrzene_pripady_vcerejsi_den) \(.ockovane_osoby_vcerejsi_den) \(.ockovane_osoby_celkem)"' |
 #  xargs printf "  New yesterday: %'4.0f\tVaccinated yesterday: %'5.0f total: %'7.0f\n"
 
-upDays="$(awk '{val = $1 / 86400; print val}' OFMT="%.0f" /proc/uptime)"
-loadAvg="$(awk '{ printf "%s, %s, %s", $1, $2, $3 }' /proc/loadavg)"
-echo "$(uname -s) $(uname -r) $(uname -p) - Up ${upDays} days. Load avarage ${loadAvg}."
-df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\t", $3,$2,$5}'
-free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }'
+if [[ "$OSTYPE" =~ ^Linux ]]; then
+  echo -ne "\n"
+  upDays="$(awk '{val = $1 / 86400; print val}' OFMT="%.0f" /proc/uptime)"
+  loadAvg="$(awk '{ printf "%s, %s, %s", $1, $2, $3 }' /proc/loadavg)"
+  echo "$(uname -s) $(uname -r) $(uname -p) - Up ${upDays} days. Load avarage ${loadAvg}."
+  df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\t", $3,$2,$5}'
+  free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }'
+fi
 
-command -v /usr/bin/fortune &> /dev/null && /usr/bin/fortune
+if command -v fortune &> /dev/null; then
+  echo -ne "\n"
+  fortune
+fi
 
 echo -ne "\n"
 
