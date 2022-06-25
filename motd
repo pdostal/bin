@@ -43,6 +43,12 @@ echo
 #  "\(.potvrzene_pripady_vcerejsi_den) \(.ockovane_osoby_vcerejsi_den) \(.ockovane_osoby_celkem)"' |
 #  xargs printf "  New yesterday: %'4.0f\tVaccinated yesterday: %'5.0f total: %'7.0f\n"
 
+upDays="$(awk '{val = $1 / 86400; print val}' OFMT="%.0f" /proc/uptime)"
+loadAvg="$(awk '{ printf "%s, %s, %s", $1, $2, $3 }' /proc/loadavg)"
+echo "$(uname -s) $(uname -r) $(uname -p) - Up ${upDays} days. Load avarage ${loadAvg}."
+df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\t", $3,$2,$5}'
+free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }'
+
 command -v /usr/bin/fortune &> /dev/null && /usr/bin/fortune
 
 echo -ne "\n"
