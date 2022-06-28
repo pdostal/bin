@@ -53,7 +53,7 @@ fi
 
 if command -v fortune &> /dev/null; then
   echo -ne "\n"
-  fortune
+  fortune -s
 fi
 
 echo -ne "\n"
