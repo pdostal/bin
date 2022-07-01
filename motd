@@ -5,6 +5,7 @@
 if [[ ! -f /tmp/motd-weather.json || -n $(find /tmp/motd-weather.json -type f -mmin +30 2> /dev/null) ]]; then
   curl -s "https://wttr.in/$LOCATION?m&format=%l:++$SIGN+%t++r:+%p++w:+%w++p:+%P++h:+%h\\n" -o /tmp/motd-weather.json
 fi
+
 #if [[ ! -f /tmp/motd-currency.json || -n $(find /tmp/motd-currency.json -type f -mmin +30 2> /dev/null) ]]; then
 #  curl -s -H "x-rapidapi-key: $RAPIDAPI" 'https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=CZK&to=USD,EUR,GBP&amount=1' -o /tmp/motd-currency.json
 #fi
@@ -53,7 +54,7 @@ fi
 
 if command -v fortune &> /dev/null; then
   echo -ne "\n"
-  fortune
+  fortune -s
 fi
 
 echo -ne "\n"
