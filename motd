@@ -2,10 +2,6 @@
 
 #. ~/bin/motd.vars
 
-if [[ ! -f /tmp/motd-weather.json || -n $(find /tmp/motd-weather.json -type f -mmin +30 2> /dev/null) ]]; then
-  curl -s "https://wttr.in/$LOCATION?m&format=%l:++$SIGN+%t++r:+%p++w:+%w++p:+%P++h:+%h\\n" -o /tmp/motd-weather.json
-fi
-
 #if [[ ! -f /tmp/motd-currency.json || -n $(find /tmp/motd-currency.json -type f -mmin +30 2> /dev/null) ]]; then
 #  curl -s -H "x-rapidapi-key: $RAPIDAPI" 'https://currency-converter5.p.rapidapi.com/currency/convert?format=json&from=CZK&to=USD,EUR,GBP&amount=1' -o /tmp/motd-currency.json
 #fi
@@ -19,13 +15,16 @@ fi
 #  curl -s https://onemocneni-aktualne.mzcr.cz/api/v2/covid-19/zakladni-prehled.min.json -o /tmp/motd-covidcz.json
 #fi
 
-HOUR=$(date +%H)
-if ((10#$HOUR >= 5 && 10#$HOUR <= 22)); then SIGN="%c"; else SIGN="%m"; fi
+#if ((10#$HOUR >= 5 && 10#$HOUR <= 22)); then SIGN="%c"; else SIGN="%m"; fi
+#if [[ ! -f /tmp/motd-weather.json || -n $(find /tmp/motd-weather.json -type f -mmin +30 2> /dev/null) ]]; then
+#  curl -s "https://wttr.in/$LOCATION?m&format=%l:++$SIGN+%t++r:+%p++w:+%w++p:+%P++h:+%h\\n" -o /tmp/motd-weather.json
+#fi
+#cat /tmp/motd-weather.json
 
 #USD=$(cat /tmp/motd-currency.json | jq -r '1/(.rates.USD.rate|tonumber)')
 
-date +"It's %A, week %V Date: %d. %B %Y Time: %H:%M:%S %p %z (%Z)"
-cat /tmp/motd-weather.json
+yearPercent=$(date +'%j' | awk '{ print int($1*100/365) }')
+date +"It's %A, week %V, $yearPercent% of the year."
 
 #cat /tmp/motd-currency.json | 
 #  jq -r '.rates|to_entries[] | "\(.key) \(1/(.value.rate|tonumber))"' |
@@ -43,13 +42,14 @@ cat /tmp/motd-weather.json
 #  "\(.potvrzene_pripady_vcerejsi_den) \(.ockovane_osoby_vcerejsi_den) \(.ockovane_osoby_celkem)"' |
 #  xargs printf "  New yesterday: %'4.0f\tVaccinated yesterday: %'5.0f total: %'7.0f\n"
 
-if [[ "$OSTYPE" =~ ^Linux ]]; then
+if [[ ${OSTYPE,,} =~ ^linux ]]; then
   echo -ne "\n"
   upDays="$(awk '{val = $1 / 86400; print val}' OFMT="%.0f" /proc/uptime)"
   loadAvg="$(awk '{ printf "%s, %s, %s", $1, $2, $3 }' /proc/loadavg)"
-  echo "$(uname -s) $(uname -r) $(uname -p) - Up ${upDays} days. Load avarage ${loadAvg}."
-  df -h | awk '$NF=="/"{printf "Disk Usage: %d/%dGB (%s)\t", $3,$2,$5}'
-  free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }'
+  diskUsage=$(df -h /| awk '$NF=="/"{printf "%s", $5}')
+  memUsage=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
+  echo "$(uname -s) $(uname -r) $(uname -p) - Up ${upDays} days"
+  echo "Load: ${loadAvg} Disk: ${diskUsage} Memory: ${memUsage}"
 fi
 
 if command -v fortune &> /dev/null; then
@@ -59,6 +59,7 @@ fi
 
 echo -ne "\n"
 
+HOUR=$(date +%H)
 if ((10#$HOUR >= 5 && 10#$HOUR <=11)); then
   echo -en "Good morning...\n\n";
 elif ((10#$HOUR >= 12 && 10#$HOUR <=20)); then
