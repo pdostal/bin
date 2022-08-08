@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+aws ec2 describe-instances --output table --query   'Reservations[*].Instances[*].{"Name": Tags[?Key=='"'Name'"'] | [0].Value, "InstanceId": InstanceId, "Address": PublicIpAddress, "State" : State.Name, "Created" : LaunchTime, "Key" : KeyName}' $@
+
