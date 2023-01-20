@@ -23,8 +23,11 @@
 
 #USD=$(cat /tmp/motd-currency.json | jq -r '1/(.rates.USD.rate|tonumber)')
 
-yearPercent=$(date +'%j' | awk '{ print int($1*100/365) }')
-date +"It's %A, week %V, $yearPercent% of the year."
+if [ "$myPrimaryDevice" == 1 ]; then
+  yearPercent=$(date +'%j' | awk '{ print int($1*100/365) }')
+  date +"It's %A, week %V, $yearPercent% of the year."
+  echo -ne "\n"
+fi
 
 #cat /tmp/motd-currency.json | 
 #  jq -r '.rates|to_entries[] | "\(.key) \(1/(.value.rate|tonumber))"' |
@@ -43,7 +46,6 @@ date +"It's %A, week %V, $yearPercent% of the year."
 #  xargs printf "  New yesterday: %'4.0f\tVaccinated yesterday: %'5.0f total: %'7.0f\n"
 
 if [[ ${OSTYPE,,} =~ ^linux ]]; then
-  echo -ne "\n"
   upDays="$(awk '{val = $1 / 86400; print val}' OFMT="%.0f" /proc/uptime)"
   loadAvg="$(awk '{ printf "%s, %s, %s", $1, $2, $3 }' /proc/loadavg)"
   diskUsage=$(df -h /| awk '$NF=="/"{printf "%s", $5}')
@@ -52,19 +54,23 @@ if [[ ${OSTYPE,,} =~ ^linux ]]; then
   echo "Load: ${loadAvg} Disk: ${diskUsage} Memory: ${memUsage}"
 fi
 
-if command -v fortune &> /dev/null; then
-  echo -ne "\n"
-  fortune -s
+if [ "$myPrimaryDevice" == 1 ]; then
+  if command -v fortune &> /dev/null; then
+    echo -ne "\n"
+    fortune -s
+  fi
 fi
 
 echo -ne "\n"
 
-HOUR=$(date +%H)
-if ((10#$HOUR >= 5 && 10#$HOUR <=11)); then
-  echo -en "Good morning...\n\n";
-elif ((10#$HOUR >= 12 && 10#$HOUR <=20)); then
-  echo -en "Have a lot of fun...\n\n";
-else
-  echo -en "Enjoy the evening...\n\n";
+if [ "$myPrimaryDevice" == 1 ]; then
+  HOUR=$(date +%H)
+  if ((10#$HOUR >= 5 && 10#$HOUR <=11)); then
+    echo -en "Good morning...\n\n";
+  elif ((10#$HOUR >= 12 && 10#$HOUR <=20)); then
+    echo -en "Have a lot of fun...\n\n";
+  else
+    echo -en "Enjoy the evening...\n\n";
+  fi
 fi
 
