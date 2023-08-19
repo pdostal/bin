@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+echo -e "IPv4: $(curl -sL https://ipv4.wtfismyip.com/text)\tIPv6: $(curl -sL https://ipv6.wtfismyip.com/text)"
