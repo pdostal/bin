@@ -15,7 +15,8 @@ if [[ ${OSTYPE,,} =~ ^linux ]]; then
   loadAvg="$(awk '{ printf "%s, %s, %s", $1, $2, $3 }' /proc/loadavg)"
   diskUsage=$(df -h /| awk '$NF=="/"{printf "%s", $5}')
   memUsage=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
-  echo "$(uname -s) $(uname -r) $(uname -p) - Up ${upDays} days"
+  osRelease=$(test -f /etc/os-release && source /etc/os-release && echo -n " ${NAME} ${VERSION}")
+  echo "$(uname -o)${osRelease} $(uname -r  | cut -d'.' -f1,2) $(uname -p) - Up ${upDays} days"
   echo "Load: ${loadAvg} Disk: ${diskUsage} Memory: ${memUsage}"
 fi
 
