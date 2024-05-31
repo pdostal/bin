@@ -1,14 +1,14 @@
 #!/bin/bash
 
 servers=()
-servers+=("http://pool.sks-keyservers.net")
-servers+=("http://keys.gnupg.net")
-servers+=("http://pgp.mit.edu")
-servers+=("http://pgp.uni-mainz.de")
-servers+=("http://keyserver.opensuse.org")
-servers+=("https://keyserver.ubuntu.com")
-servers+=("https://pgp.key-server.io")
-servers+=("https://keys.openpgp.org")
+#servers+=("http://pool.sks-keyservers.net")
+#servers+=("http://keys.gnupg.net")
+servers+=("keyserver.ubuntu.com")
+servers+=("pgp.mit.edu")
+#servers+=("pgp.uni-mainz.de")
+#servers+=("http://keyserver.opensuse.org")
+#servers+=("https://pgp.key-server.io")
+servers+=("keys.openpgp.org")
 
 echo "We use those servers: "
 for i in "${!servers[@]}"; do
