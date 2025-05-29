@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+if command -v perltidy &> /dev/null; then
+  echo -ne "Running perltidy \"$*\"\n"
+  perltidy "$@"
+
+  for arg in "$@"; do
+    echo "Removing ${arg}.tdy"
+    rm "${arg}.tdy"
+  done
+else
+  echo -ne "Install perltidy\n"
+fi
+echo -ne "\n"
+
+if command -v tidyall &> /dev/null; then
+  echo -ne "Running tidyall \"$*\"\n"
+  tidyall "$@"
+  echo -ne "\n"
+else
+  echo -ne "Install tidyall\n"
+fi
+echo -ne "\n"
+
+if command -v perlcritic &> /dev/null; then
+  echo -ne "Running perlcritic \"$*\"\n"
+  perlcritic "$@"
+  echo -ne "\n"
+else
+  echo -ne "Install perlcritic\n"
+fi
+
+echo -ne "Now we're in shape.\n"
+
