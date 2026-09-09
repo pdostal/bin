@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if ! command -v jq >/dev/null 2>&1; then
+  echo "Error: jq is not installed." >&2
+  exit 1
+fi
+
+if [[ $# -lt 1 || $# -gt 2 ]]; then
+  echo "Usage: $(basename "$0") <title> [message]" >&2
+  exit 1
+fi
+
+if [[ -z "$PUSHOVER_TOKEN" || -z "$PUSHOVER_USER" ]]; then
+  echo "Error: PUSHOVER_TOKEN and PUSHOVER_USER must be set." >&2
+  exit 1
+fi
+
+title="$1"
+message="${2:-$1}"
+
+if ! response=$(curl -sS -X POST \
+  -H "Accept: application/json" \
+  -F "token=${PUSHOVER_TOKEN}" \
+  -F "user=${PUSHOVER_USER}" \
+  -F "title=${title}" \
+  -F "message=${message}" \
+  "https://api.pushover.net/1/messages.json"); then
+  printf 'Error: curl request failed.\n' >&2
+  exit 1
+fi
+
+if jq -e '.status == 1' >/dev/null 2>&1 <<<"$response"; then
+  printf 'Message sent.\n'
+  exit 0
+else
+  printf 'Error: %s\n' "$response"
+  exit 1
+fi
